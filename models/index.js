@@ -20,9 +20,10 @@ const BookingSchema = new mongoose.Schema({
 });
 
 const UserSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
+  userName : { type: String, required: true, unique: false },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['admin', 'customer'], required: true },
+  role: { type: String, required: true },
 });
 
 const Package = mongoose.model('Package', PackageSchema);
