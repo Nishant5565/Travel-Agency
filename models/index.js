@@ -9,14 +9,19 @@ const PackageSchema = new mongoose.Schema({
 });
 
 const BookingSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  passenger: [{
+    name: { type: String, required: true },
+    gender: { type: String, required: true },
+    age: { type: Number, required: true }
+  }],
   email: { type: String, required: true },
   phoneNumber: { type: String, required: true },
   travelers: { type: Number, required: true },
   specialRequests: { type: String },
   package: { type: mongoose.Schema.Types.ObjectId, ref: 'Package', required: true },
   totalPrice: { type: Number, required: true },
-  date: { type: Date, default: Date.now },
+  bookedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  date: { type: Date,required: true },
 });
 
 const UserSchema = new mongoose.Schema({

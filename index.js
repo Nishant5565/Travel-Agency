@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const { PORT, MONGODBURL } = process.env;
 const app = express();
+const User = require('./models/index').User;
 const authenticateToken = require('./middleware/auth');
 
 //* Middleware
@@ -17,6 +18,17 @@ app.use(cors(
 ));
 app.use(bodyParser.json());
 
+
+//* Auth jwt checker and user data
+
+app.post('/check-auth', authenticateToken,async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid token', error });
+  }
+});
 
 //* MongoDB Connection
 mongoose.connect(MONGODBURL)
@@ -40,7 +52,7 @@ app.get('/api-docs', (req, res) => {
     </ul>
   `);
 });
-app.use('/api', require('./routes'));
+app.use('/api',require('./routes'));
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
