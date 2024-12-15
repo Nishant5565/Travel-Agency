@@ -1,5 +1,5 @@
 const express = require('express');
-const { signup, login, getPackages, getPackageById, createBooking, addPackage, updatePackage, deletePackage, getBookings, getBookingAnalytics , getUserBookings, cancelBooking} = require('../controllers');
+const { signup, login, getPackages, getPackageById, createBooking, addPackage, updatePackage, deletePackage, getBookings, getBookingAnalytics , getUserBookings, cancelBooking,getBookingById} = require('../controllers');
 const authenticateToken = require('../middleware/auth');
 const router = express.Router();
 
@@ -19,6 +19,7 @@ router.get('/packages/:id', getPackageById);
 router.post('/bookings', createBooking);
 router.get('/user/bookings', getUserBookings);
 router.delete('/bookings/:id', cancelBooking);
+router.get('/bookings/:id', getBookingById);
 
 //! Routes for the admin
 router.post('/admin/packages', addPackage);

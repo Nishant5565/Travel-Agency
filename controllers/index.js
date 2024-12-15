@@ -205,6 +205,30 @@ const getUserBookings = async (req, res) => {
   }
 };
 
+// get booking by id
+const getBookingById = async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ message: 'Unauthorized' });
+
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, SECRET_KEY);
+    if (!decoded) return res.status(401).json({ message: 'Unauthorized' });
+    const userId = decoded.id;
+
+    const booking = await Booking.findById(req.params.id).populate('package');
+    if (booking.bookedBy.toString() !== userId) return res.status(401).json({ message: 'Unauthorized' });
+    if (!booking) return res.status(404).json({ message: 'Booking not found' });
+    res.json(booking);
+
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Error fetching booking', error });
+  }
+}
+
+
 const cancelBooking = async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
@@ -240,6 +264,7 @@ module.exports = {
   getBookingAnalytics,
   getUserBookings,
   cancelBooking, 
+  getBookingById
 };
 
 
